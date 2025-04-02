@@ -1,0 +1,108 @@
+\section{Odd Elastodynamics}
+
+Last time, we looked at microscopic models where odd elasticity could arise. We also looked in detail at how energy could be generated in cycles of such system. Today we look odd elastodynamics, and study the dynamical equation for the displacement field. The presentation will be more algebraic.
+
+In the last few lectures, we had pictures of different stresses/strains - these were pictorial representations of tensors, and in this lecture we make a dictionary to map between the pictures and algebra. For example we'll see how the tensors:
+\begin{equation}
+    \m{1 & 0 \\ 0 & 1} \to \delta_{ij}, \quad \m{0 & -1 \\ 1 & 0} \to \e_{ij}
+\end{equation}
+connect to stress/strain. For simplicity, we stay in 2D.
+
+We recall the stress/strain relation:
+\begin{equation}
+    \sigma_{ij} = K_{ijmn}\p_m u_n  = K_{ijmn}u_{mn}
+\end{equation}
+Where we have the stiffness tensor $K_{ijmn}$. We wrote this relation (using symmetry constraints) as:
+\begin{equation}\label{eq:macroscopic}
+    \m{\text{P} \\ \text{T} \\ \text{SS1} \\ \text{SS2}} = \m{B & 0 & 0 & 0 \\ A & 0 & 0 & 0 \\ 0 & 0 & G & -K^0 \\ 0 & 0 & +K^0 & G}\m{\text{D} \\ \text{R} \\ \text{S1} \\ \text{S2}}
+\end{equation}
+Note that if $\sigma_{ij} = \frac{\delta \e}{\delta u_{ij}}$, then $K_{ijmn} = K_{mnij}$, but if $\sigma_{ij}$ is not of this form then $K$ is not necessary symmetric, so we can have the elastic moduli $K^0, A$ emerge in the stiffness tensor.
+
+\subsection{Algebraic Representation of Stiffness Tensor}
+Let's now switch to an algebraic representation:
+\begin{equation}
+    K_{ijmn} = B\delta_{ij}\delta_{mn} - A\e_{ij}\delta_{mn} + G(\delta_{in}\delta_{jm} + \delta_{im}\delta_{jn} - \delta_{ij}\delta_{mn}) + K^0 \frac{1}{2}(\e_{im}\delta_{jn} + \e_{in}\delta_{jm} + \e_{jm}\delta_{in} + \e_{jn}\delta_{im})
+\end{equation}
+The first term corresponds to the bulk modulus, which connects the dilation (projection of $u_{mn}$ onto identity/$\delta_{mn}$) and the pressure (projection of $\sigma_{ij}$ onto identity/$\delta_{ij}$). Thus it is not surprising that it has the form above; explicitly, they are derived via:
+\begin{equation}
+    P\delta_{ij} = B(\nabla \cdot \v{u})\delta_{ij} \implies \sigma_{ij} = \left[B\delta_{ij}\delta_{mn}\right]\p_m u_n
+\end{equation}
+For torque, we project $\sigma_{ij}$ onto the antisymmetric matrix $\e_{ij}$ (the sign of $A$ in $K_{ijmn}$ is up to convention of dilation - we choose it to be negative so we get a positive sign in the equation of motion):
+\begin{equation}
+    T\e_{ij} = A(\nabla \cdot \v{u})\e_{ij} \implies \sigma_{ij} = \left[A\e_{ij}\delta_{mn}\right]\p_m u_n
+\end{equation}
+
+Note that the $G$ term is invariant/same sign (even) under $ij \leftrightarrow mn$, while the $K^0$ term flips sign (odd) under $ij \leftrightarrow mn$.
+
+\subsection{Equation of Motion}
+I can now calculate the stress in terms of the strain, and taking one more derivative of the stress I can get the force. Then we obtain the equation of motion for odd elasticity!
+
+\begin{equation}
+    \rho \p_t^2 u_j + \Gamma \p_t u_j = F_j = \p_i \sigma_{ji} = \p_i (K_{jimn} \p_m u_n ) = K_{jimn}\p_i \p_m u_n
+\end{equation}
+where we note that the $\p_i$ commutes across the $K_{jimn}$ as the stiffness tensor is position independent (just a tensor of numbers). Thus, we have an EoM that relates a first + second time derivative to a second spatial derivative of displacement/strain.
+
+If we looked at the robots of last time (centimeter scale), the first/inertial term $\rho \p_t^2 u_j$ is important. But for very small systems we can consider the overdamped limit (equivalently - the low Reynolds number\footnote{$R = \frac{uL}{\nu}$ with $u$ the velocity, $L$ the characteristic size, $\nu$ the viscosity} limit):
+\begin{equation}
+    \Gamma \dot{u}_j \gg \rho \ddot{u}_j.
+\end{equation}
+Thus, in the analysis of our equations of motion we neglect the inertial term.
+
+A good exercise is to massage the derivatives until the terms with two spatial derivatives have recognizable form. For the $B$ term, we get:
+\begin{equation}
+    \Gamma \p_t u_j = \p_i K_{jimn} \stackrel{B-term}{=} \p_i B \delta_{ji}\delta_{mn}u_{mn} = B\p_j \p_i u_i
+\end{equation}
+or as a vector:
+\begin{equation}
+    \Gamma \p_t \v{u} = B\nabla(\nabla \cdot \v{u})
+\end{equation}
+For the $A$ term, we get:
+\begin{equation}
+    \Gamma \p_t u_j = \p_i K_{jimn} \stackrel{A-term}{=} A\e_{ji}\delta_{mn}\p_i u_{mn} = A\e_{jk}\p_k \p_i u_i
+\end{equation}
+or as a vector:
+\begin{equation}
+    \Gamma \p_t \v{u} = A\zhat \times \nabla(\nabla \cdot \v{u})
+\end{equation}
+
+Writing down the other terms:
+\begin{equation}
+    \Gamma \p_t u_j = B\nabla(\nabla \cdot \v{u}) + G\nabla^2u_j + A\e_{jk}\p_k \p_i u_i + K^0\e_{jk}\nabla^2 u_k 
+\end{equation}
+or vectorially:
+\begin{equation}
+    \Gamma \p_t \v{u} =B\nabla(\nabla \cdot \v{u}) + G\nabla^2\v{u} + A\zhat \times \nabla(\nabla \cdot \v{u}) + K^0 \zhat \times (\nabla^2 \v{u})
+\end{equation}
+
+\subsection{Limits and Physical Interpretations}
+Note that if $B = A = K^0 = 0$, then we just have a diffusion equation. So one interpretation of what we have derived is a non-reciprocal diffusion equation.
+
+Note that if instead we worked in the underdamped limit, we would have:
+\begin{equation}
+    \rho \p_t^2 \v{u} = G\nabla^2 \v{u}
+\end{equation}
+which is a wave equation, with wave speed $c = \sqrt{\frac{G}{\rho}}$. This wave equation is predicated on two things - that we have a nonzero shear modulus and that we have a second derivative in time. If we kill the second derivative, we overdamp the oscillations. If we work in a medium with $B \approx G \approx 0$, so the medium is not elastic/we've killed the ability of the medium to rattle kinetic energy to potential energy (you can interpret $B/G$ as the spring constants of your medium). 
+
+Now the question is - can we be in the overdamped regime and in the regime where $K^0 \gg G, B, A$ and have the medium still support waves? The answer is, strikingly, yes! We'll watch a movie next time, but for now let's write down the equation in this limit:
+\begin{equation}
+    \Gamma\m{\dot{u}_x\\\dot{u}_y} = \m{0 & -K^0 \\ K^0 & 0}\nabla^2\m{u_x \\ u_y}
+\end{equation}
+If we did not throw away the shear modulus $G$, then we would have diagonal components and diffusion transport. But in this limit we still have the interesting cross-diffusion terms. This might remind us of Hamilton's equation for the harmonic oscillator, where for $U = \frac{1}{2}x^2$ ($m=k=1$):
+\begin{equation}
+    \dot{x} = p, \dot{p} = -\p_x U \implies \p_t\m{x \\ p} = \m{0 & 1 \\ -1 & 0}\m{x \\ p}
+\end{equation}
+We note the symplectic matrix:
+\begin{equation}
+    \Omega = \m{0 & 1 \\ -1 & 0}
+\end{equation}
+which is what is responsible for the oscillatory behavior (the fact that they are conjugate coordinates is what further gives us energy conservation). Here $u_x, u_y$ are not canonical conjugate coordinates, but seeing that it has the same symplectic structure, we will have oscillatory behaviour (you might object that we have the Laplacian $\nabla^2$ - but we can get rid of this via Fourier transform, so the Laplacian just gives a $k^2$). Interestingly, the shear modulus $G$ actually hinders the elasticity, while the odd elasticity $K^0$ is responsible for the wave propagation.
+
+Formally, we can write solutions:
+\begin{equation}
+    u_i(\v{x}) = \tilde{u}_i(\v{q})e^{i(\v{q} \cdot \v{x} - \omega t)}
+\end{equation}
+where:
+\begin{equation}
+    \omega = \frac{K^0}{\Gamma}q^2
+\end{equation}
+Ok, so we get oscillatory behaviour. But why? The intuition is the following - work is no longer a state function, so if we have cycles, we can take in or put out energy in a rate-independent manner. So, if we have an odd elastic medium, we peturb it, then the medium can go through a cyclic deformation, wherein it can take in energy to keep the motion going (rather than dissipating it).
